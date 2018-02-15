@@ -14,12 +14,10 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # HADOOP
-COPY hadoop-2.7.5.tar.gz /root
+ADD http://www-eu.apache.org/dist/hadoop/common/hadoop-2.7.5/hadoop-2.7.5.tar.gz /root
 RUN tar xvf /root/hadoop-2.7.5.tar.gz -C /root/
 
 # JAVA
-ADD http://www-eu.apache.org/dist/hadoop/common/hadoop-2.7.5/hadoop-2.7.5.tar.gz /root
-RUN tar xvf /root/jdk-8u162-linux-x64.tar.gz -C /root/
 RUN add-apt-repository ppa:webupd8team/java
 RUN apt-get update
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
