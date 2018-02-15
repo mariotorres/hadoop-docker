@@ -6,23 +6,25 @@ FROM ubuntu:16.04
 RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
   apt-get update && \
-  apt-get install -y dialog apt-utils && \
   apt-get -y upgrade && \
+  apt-get install -y dialog apt-utils && \
   apt-get install -y build-essential openssh-server && \
   apt-get install -y software-properties-common && \
-  apt-get install -y python3=3.5.1* byobu curl git htop man unzip vim wget && \
+  apt-get install -y python3=3.5.1* curl git man unzip nano wget && \
   rm -rf /var/lib/apt/lists/*
 
-# HADOOP
-ADD http://www-eu.apache.org/dist/hadoop/common/hadoop-2.7.5/hadoop-2.7.5.tar.gz /root
-RUN tar xvf /root/hadoop-2.7.5.tar.gz -C /root/
+RUN add-apt-repository ppa:webupd8team/java && apt-get update
 
 # JAVA
-RUN add-apt-repository ppa:webupd8team/java
-RUN apt-get update
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
     apt-get install -y oracle-java8-installer
 RUN apt-get install -y oracle-java8-set-default
+
+# HADOOP
+ADD http://www-eu.apache.org/dist/hadoop/common/hadoop-2.7.5/hadoop-2.7.5.tar.gz /root
+RUN tar -xf /root/hadoop-2.7.5.tar.gz -C /root/
+RUN rm /root/hadoop-2.7.5.tar.gz
+RUN cd /root && ln -s ./hadoop-2.7.5 hadoop
 
 # SSH
 RUN mkdir /var/run/sshd
